@@ -76,8 +76,7 @@ LF EQU 10    ; LINEA
     MSG_BARCO1 DB 'Porta Avioes: $'
     MSG_BARCO2 DB 'Navio de Guerra: $'
     MSG_BARCO3 DB 'Submarino: $'
-    MSG_BARCO4 DB 'Destroyer: $'
-    MSG_BARCO5 DB 'Barco Patrulha: $'  
+    
     
     MSG_CONFIG21 DB 'Colocando os navios  ','$'
     MSG_CONFIG22 DB 'do computador.       ','$'
@@ -956,13 +955,13 @@ prepareboard proc   ; proc para preparar o tabuleiro do jogador
     mov DL,COLUNA_CONFIG+1 ;coluna
     mov DH,21 ;linha
     call posicionacursor
-    mov DX, OFFSET MSG_BARCO2 ;Navio de Guerra
+    mov DX, OFFSET MSG_BARCO2 ;Crucero
     call printstring
     call getcursorposition     
     
     call readinput  ;proc pra ler valores da posi??o do porta avioes
     mov bx, endereco_lin_col   ;indice da posicao inicial do barco
-    mov simbolo, 'B' ; B = Navio de Guerra
+    mov simbolo, 'C' ; B = Navio de Guerra
     ;mov CX, 4
     mov tamanhobarco, 4       ;CX = Tamanho do barco
     call verificanavio ;verifica se a posi??o ? v?lida
@@ -1001,58 +1000,7 @@ prepareboard proc   ; proc para preparar o tabuleiro do jogador
     call addbarco
     call desenhabarco
     call okmsg           
-    ;______________________________________________
-  INVAD:  
-    mov BH,2
-    mov DL,COLUNA_CONFIG+1 ;coluna
-    mov DH,21 ;linha
-    call posicionacursor
-    mov DX, OFFSET MSG_BARCO4 ;Destroyer
-    call printstring
-    call getcursorposition     
-      
-    call readinput  ;proc pra ler valores da posi??o do porta avioes
-    mov bx, endereco_lin_col   ;?ndice da posicao inicial do barco
-    mov simbolo, 'D' ; D = Destroyer
-    ;mov CX, 3
-    ;tamanhobarco j? tem 3       ;CX = Tamanho do barco
-    call verificanavio ;verifica se a posi??o ? v?lida
-    cmp BX,100 ;se for inv?lida, BX t? com 100
-    jne DVALIDO ;Destroyer valido
-    call barcoinvalidomsg 
-    jmp INVAD 
-    
-   DVALIDO:
-    call addbarco
-    call desenhabarco
-    call okmsg 
-    ;_______________________________________________
-  INVP:  
-    mov BH,2
-    mov DL,COLUNA_CONFIG+1 ;coluna
-    mov DH,21 ;linha
-    call posicionacursor
-    mov DX, OFFSET MSG_BARCO5 ;Barco patrulha
-    call printstring
-    call getcursorposition       
-    
-    call readinput  ;proc pra ler valores da posi??o do porta avioes
-    mov bx, endereco_lin_col   ;?ndice da posicao inicial do barco
-    mov simbolo, 'P' ; P = Barco Patrulha
-    ;mov CX, 2
-    mov tamanhobarco, 2       ;CX = Tamanho do barco
-    call verificanavio ;verifica se a posi??o ? v?lida
-    cmp BX,100 ;se for inv?lida, BX t? com 100
-    jne PVALIDO ;Barco Patrulha v?lido
-    call barcoinvalidomsg 
-    jmp INVP 
-    
-   PVALIDO:
-    call addbarco
-    call desenhabarco
-    call okmsg 
-    ret
-endp
+  
 ;_________________________________________________________________________________________________________________________________
 ;_________________________________________________________________________________________________________________________________
 configboardcomputer proc  ;proc para preparar o tabuleiro do computador
@@ -1108,30 +1056,7 @@ configboardcomputer proc  ;proc para preparar o tabuleiro do computador
     jmp CPU_SUBMARINO
   CPU_SVALIDO:
     call addbarco ;adiciona o barco no vetor de barcos
-
-  CPU_DESTROYER:  
-    call RNG ;"input" do computador
-    mov bx, endereco_lin_col
-    ;mov CX, 3 ;tamanho do destroyer
-    ;tamanhobarco j? ? 3
-    call verificanavio
-    cmp BX,100  ;se for 100, a posicao é invalida
-    jne CPU_DVALIDO
-    jmp CPU_DESTROYER
-  CPU_DVALIDO:
-    call addbarco ;adiciona o barco no vetor de barcos
-
-  CPU_BARCO_PATRULHA:  
-    call RNG ;"input" do computador
-    mov bx, endereco_lin_col
-    ;mov CX, 2 ;tamanho do barco patrulha
-    mov tamanhobarco, 2
-    call verificanavio
-    cmp BX,100 ;se for 100, a posicao é invalida
-    jne CPU_PVALIDO
-    jmp CPU_BARCO_PATRULHA
-  CPU_PVALIDO:
-    call addbarco   ;adiciona o barco no vetor de barcos   
+ 
     ret
 endp
 ;_________________________________________________________________________________________________________________________________
@@ -1936,9 +1861,9 @@ GAMESTART:
     call yourturn
     call computerturn    
     
-    cmp acertos,17 ;5+4+3+3+2 = 17
+    cmp acertos,12 ;5+4+3 = 12       ;12 aciertosgana juego
     je USERGANHOU
-    cmp acertoscomputer, 17
+    cmp acertoscomputer, 12
     je COMPGANHOU
     jmp GAMESTART
     
