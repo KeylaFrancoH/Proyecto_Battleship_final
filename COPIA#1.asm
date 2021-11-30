@@ -53,17 +53,17 @@ LF EQU 10    ; LINEA
     MSG_CONFIG1  DB  0DAh,0C4h,0C4h,0C4h,0C4h,0C4h,0C4h,0C4h,0C4h,0C4h,0C4h,0C4h,0C4h,0C4h,0C4h,0C4h,0C4h,0C4h,0C4h,0C4h,0C4h,0C4h,0BFh,'$'
     MSG_CONFIG2  DB  0B3h,'  MATRIZ  DE  NAVIOS ',0B3h,'$'
     MSG_CONFIG3  DB  0C3h,0C4h,0C4h,0C4h,0C4h,0C4h,0C4h,0C4h,0C4h,0C4h,0C4h,0C4h,0C4h,0C4h,0C4h,0C4h,0C4h,0C4h,0C4h,0C4h,0C4h,0C4h,0B4h,'$'
-    MSG_CONFIG4  DB  0B3h,'  0',0B3h,'1',0B3h,'2',0B3h,'3',0B3h,'4',0B3h,'5',0B3h,'6',0B3h,'7',0B3h,'8',0B3h,'9',0B3h,'$'
-    MSG_CONFIG5  DB  0B3h,'0                    ',0B3h,'$'
+    MSG_CONFIG4  DB  0B3h,'  ',0B3h,'1',0B3h,'2',0B3h,'3',0B3h,'4',0B3h,'5',0B3h,'6',0B3h,' ',0B3h,' ',0B3h,' ',0B3h,'$'
+    MSG_CONFIG5  DB  0B3h,'                    ',0B3h,'$'
     MSG_CONFIG6  DB  0B3h,'1                    ',0B3h,'$'
     MSG_CONFIG7  DB  0B3h,'2                    ',0B3h,'$'
     MSG_CONFIG8  DB  0B3h,'3                    ',0B3h,'$'
     MSG_CONFIG9  DB  0B3h,'4                    ',0B3h,'$'
     MSG_CONFIG10  DB 0B3h,'5                    ',0B3h,'$'
     MSG_CONFIG11  DB 0B3h,'6                    ',0B3h,'$'
-    MSG_CONFIG12  DB 0B3h,'7                    ',0B3h,'$'
-    MSG_CONFIG13  DB 0B3h,'8                    ',0B3h,'$'
-    MSG_CONFIG14  DB 0B3h,'9                    ',0B3h,'$'
+    MSG_CONFIG12  DB 0B3h,'                     ',0B3h,'$'
+    MSG_CONFIG13  DB 0B3h,'                     ',0B3h,'$'
+    MSG_CONFIG14  DB 0B3h,'                     ',0B3h,'$'
     MSG_CONFIG15  DB 0C0h,0C4h,0C4h,0C4h,0C4h,0C4h,0C4h,0C4h,0C4h,0C4h,0C4h,0C4h,0C4h,0C4h,0C4h,0C4h,0C4h,0C4h,0C4h,0C4h,0C4h,0C4h,0D9h,'$'
     MSG_CONFIG16  DB 0DAh,0C4h,0C4h,0C4h,0C4h,0C4h,0C4h,0C4h,0C4h,0C4h,0C4h,0C4h,0C4h,0C4h,0C4h,0C4h,0C4h,0C4h,0C4h,0C4h,0C4h,0C4h,0BFh,'$'
     MSG_CONFIG17  DB 0B3h,'Insira a posicao do  ',0B3h,'$'
@@ -517,14 +517,14 @@ RNG proc
 
     mov  ax, dx  ;move valor pra dividir
     xor  dx, dx  
-    mov  cx, 100  ;dividir por 100 pro restante ser de 0 a 99  
+    mov  cx, 100 ;dividir por 100 pro restante ser de 0 a 99  
     div  cx       ; DX tem o restante da divisao 
     mov endereco_lin_col, dx
 
     push dx
     mov ax,dx
     xor dx,dx
-    mov cx, 10 ;dividir por 10 pra pegar valor da coluna
+    mov cx, 6 ;dividir por 10 pra pegar valor da coluna
     div cx
     mov coluna,dl
     mov linha,al
@@ -573,11 +573,11 @@ verificanavio proc ;proc para verificar se nao vai dar overlap de navios ou bord
   VERIFVERT:  
 	cmp byte ptr [SI+BX], 0 ;Testa se ha algo na posicao
     ja VERIFICANAVIOINVALIDO     
-    cmp BX,100
+    cmp BX,36
     jb NELV ;N?o Estourou Linha Vertical
     jmp VERIFICANAVIOINVALIDO
     NELV: 
-    add BX,10
+    add BX,6
     loop VERIFVERT ;Loop baseado no tamanho do barco
     jmp VALIDO
     
@@ -586,7 +586,7 @@ verificanavio proc ;proc para verificar se nao vai dar overlap de navios ou bord
     mov bl,coluna
   LOOPVERIFHORIZ1: ;testa primeiro se nao estoura linha
     add BX, 1
-    cmp BX, 10
+    cmp BX,6
     jb NELH   ;N?o Estourou Linha Horizontal
     ja VERIFICANAVIOINVALIDO
     NELH:
@@ -623,10 +623,10 @@ readinputaction proc                       ; le os dados de entrada do tiro
     cmp al, CR              ; verifica se eh ENTER
     jz LEITURANUMACTION ; je
      
-    cmp al, '0'             ; verificar se eh valido
+    cmp al, '1'             ; verificar se eh valido
     jb LEITURANUMACTION 
   
-    cmp al, '9'
+    cmp al, '6'
     ja LEITURANUMACTION
     mov dl,al
     call writechar
@@ -639,7 +639,7 @@ readinputaction proc                       ; le os dados de entrada do tiro
     sub al,'0'
     mov coluna, al
     mov al, linha
-    mov dl,10      ;linha * 10
+    mov dl, 6      ;linha * 10
     mul dl
     mov ah, coluna
     add al,ah      ;(linha*10)+coluna
@@ -659,7 +659,7 @@ addbarco proc  ;precisa do indice em BX, endereco da matriz em SI,e tamanho do b
     
   VERTICAL:     
     mov [SI+BX],dl ;Coloca valor de DL na posicao BX da matriz ("vetor")
-    add BX, 10
+    add BX, 6
     loop VERTICAL ;LOOP Decrementa o cx
     jmp BARCOOK
   HORIZONTAL:
@@ -1216,10 +1216,10 @@ readinput proc                      ; le os dados de entrada do tabuleiro
     cmp al, CR              ; verifica se eh ENTER
     jz LEITURANUM ; je
       
-    cmp al, '0'             ; verificar se eh valido
+    cmp al, '1'             ; verificar se eh valido
     jb LEITURANUM 
   
-    cmp al, '9'
+    cmp al, '6'
     ja LEITURANUM
     mov dl,al
     call writechar
@@ -1230,7 +1230,9 @@ readinput proc                      ; le os dados de entrada do tabuleiro
     jmp PULO
   VALORCOLUNA:
     sub al,48
-    mov coluna, al
+    mov coluna, al     
+    
+    ;DELIMITACION DE LOS NUMEROS QUE PUEDE INGRRESAR EL USUARIO
     
   LERSENTIDO:
     call readkeyboard
@@ -1245,7 +1247,7 @@ readinput proc                      ; le os dados de entrada do tabuleiro
     xor ah,ah
     mov sentido, ax
     mov al, linha
-    mov dl,10      ;linha * 10
+    mov dl,6      ;linha * 6
     mul dl
     mov ah, coluna
     add al,ah      ;(linha*10)+coluna
@@ -1350,7 +1352,7 @@ config_screen proc                  ; Escreve a tela de configuracao, chama proc
     call printstring
     pop DX  
     inc BL
-    
+                                  .
     mov DH,BL    
     call posicionacursor 
     push DX
@@ -1861,7 +1863,7 @@ GAMESTART:
     call yourturn
     call computerturn    
     
-    cmp acertos,12 ;5+4+3 = 12       ;12 aciertosgana juego
+    cmp acertos,12 ;5+4+3 = 12       ;12 aciertosgana 
     je USERGANHOU
     cmp acertoscomputer, 12
     je COMPGANHOU
