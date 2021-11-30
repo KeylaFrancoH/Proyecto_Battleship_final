@@ -35,11 +35,11 @@ CR EQU 13
 LF EQU 10
 
 ;---------------------Mensagens do Jogo---------------------
-   TELA_INICIAL1 DB 0C9h,0CDh,0CDh,0CDh,0CDh,0CDh,0CDh,0CDh,0CDh,0CDh,0CDh,0CDh,0CDh,0CDh,0CDh,0CDh,0CDh,0CDh,0CDh,0CDh,0CDh,0CDh,0CDh,0CDh,0CDh,0CDh,0CDh,0CDh,0CDh,0CDh,0CDh,0CDh,0CDh,0CDh,0CDh,0BBh,'$' 
-   TELA_INICIAL2 DB 0BAh,'    B A T A L H A    N A V A L    ',0BAh,'$' 
-   TELA_INICIAL3 DB 0BAh,'      [J]ogar        [S]air       ',0BAh,'$'
-   TELA_INICIAL4 DB 0BAh,'        Samuel Formigheri         ',0BAh,'$' 
-   TELA_INICIAL5 DB 0C8h,0CDh,0CDh,0CDh,0CDh,0CDh,0CDh,0CDh,0CDh,0CDh,0CDh,0CDh,0CDh,0CDh,0CDh,0CDh,0CDh,0CDh,0CDh,0CDh,0CDh,0CDh,0CDh,0CDh,0CDh,0CDh,0CDh,0CDh,0CDh,0CDh,0CDh,0CDh,0CDh,0CDh,0CDh,0BCh,'$'
+   TELA_INICIAL1 DB 0C9h,0CDh,0CDh,0CDh,0CDh,0CDh,0CDh,0CDh,0CDh,0CDh,0CDh,0CDh,0CDh,0CDh,0CDh,0CDh,0CDh,0CDh,0CDh,0CDh,0CDh,0CDh,0CDh,0CDh,0CDh,0CDh,0CDh,0CDh,0CDh,0CDh,0CDh,0CDh,0CDh,0CDh,0CDh,0CDh,0CDh,0CDh,0CDh,0CDh,0CDh,0CDh,0CDh,0CDh,0CDh,0CDh,0CDh,0CDh,0CDh,0CDh,0BBh,'$' 
+   TELA_INICIAL2 DB 0BAh,'          B A T A L L A    N A V A L             ',0BAh,'$' 
+   TELA_INICIAL3 DB 0BAh,'Presiona ENTER para iniciar y s para salir       ',0BAh,'$'
+   TELA_INICIAL4 DB 0BAh,'          Franco Keyla, Zaruma Ricardo           ',0BAh,'$' 
+   TELA_INICIAL5 DB 0C8h,0CDh,0CDh,0CDh,0CDh,0CDh,0CDh,0CDh,0CDh,0CDh,0CDh,0CDh,0CDh,0CDh,0CDh,0CDh,0CDh,0CDh,0CDh,0CDh,0CDh,0CDh,0CDh,0CDh,0CDh,0CDh,0CDh,0CDh,0CDh,0CDh,0CDh,0CDh,0CDh,0CDh,0CDh,0CDh,0CDh,0CDh,0CDh,0CDh,0CDh,0CDh,0CDh,0CDh,0CDh,0CDh,0CDh,0CDh,0CDh,0CDh,0BCh,'$'
    
    COLUNA_TELA_INICIAL EQU 22
 ;-----------Mensagens para Configurar o Tabuleiro-----------
@@ -1332,11 +1332,11 @@ readinput proc                      ; le os dados de entrada do tabuleiro
 endp
 ;_________________________________________________________________________________________________________________________________
 ;_________________________________________________________________________________________________________________________________
-readinitgame proc                   ; le a entrada J - JOGAR S - SAIR
+readinitgame proc                   ; le a entrada ENTER para jugar S - SAIR
     push ax
   LEITURAJOGO:
     call readkeyboard
-    cmp al, 'j'
+    cmp al, CR              ; verifica se eh ENTER
     je INICIAROJOGO
     cmp al, 's'
     je SAIRDOJOGO
