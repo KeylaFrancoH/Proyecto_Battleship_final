@@ -535,11 +535,11 @@ RNG proc
     mov cx,2    ;escolha do sentido
     div cx
     cmp dx,1
-  ;  je RNGh     ;se for 1 = horizontal
-;    mov sentido, 'v'
-;    jmp RNGok
-;  RNGh:
-;    mov sentido, 'h'
+    je RNGh     ;se for 1 = horizontal
+    mov sentido, 'v'
+    jmp RNGok
+  RNGh:
+    mov sentido, 'h'
   RNGok: 
     pop_all
     ret
@@ -623,10 +623,10 @@ readinputaction proc                       ; le os dados de entrada do tiro
     cmp al, CR              ; verifica se eh ENTER
     jz LEITURANUMACTION ; je
      
-    cmp al, '1'             ; verificar se eh valido
+    cmp al, '0'             ; verificar se eh valido
     jb LEITURANUMACTION 
   
-    cmp al, '6'
+    cmp al, '5'
     ja LEITURANUMACTION
     mov dl,al
     call writechar
