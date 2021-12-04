@@ -78,8 +78,8 @@ LF EQU 10    ; LINEA
 ;    MSG_BARCO3 DB 'Submarino: $'
 ;    
 ;    
-    MSG_CONFIG21 DB 'Colocando os navios  ','$'
-    MSG_CONFIG22 DB 'do computador.       ','$'
+    MSG_CONFIG21 DB '                    ','$'
+    MSG_CONFIG22 DB '                 Colocando os navios do computador.       ','$'
 ; 
 ;------------------------Tela do jogo-----------------------  
 
@@ -699,13 +699,14 @@ atualizastats proc
 	  mov DL, DH
 	  add DL, 48
 	  call writedirect
-	  mov DL, coltiros+1
+	  mov DL, coltiros+1 
       mov DH, lintiros
     call posicionacursor
       xor DX,DX
       mov DL, AL
       call writedirect	
-    
+      
+      
     xor AX,AX
     xor CX, CX
     ;Acertos Jogador_____________________________
@@ -733,10 +734,12 @@ atualizastats proc
       xor DX,DX
       mov DL, AL
       call writedirect	
-
+    
+   
     pop_all
     ret
-endp
+endp  
+
 ;_________________________________________________________________________________________________________________________________
 ;_________________________________________________________________________________________________________________________________  
 ;atualizastatscomputer proc  
