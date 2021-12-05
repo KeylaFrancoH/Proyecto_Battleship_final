@@ -116,9 +116,9 @@ LF EQU 10    ; LINEA
 
 ;--------------------------Pantalla Final-----------------------
     MSG_FINAL1 db 0C9h,0CDh,0CDh,0CDh,0CDh,0CDh,0CDh,0CDh,0CDh,0CDh,0CDh,0CDh,0CDh,0CDh,0CDh,0CDh,0CDh,0CDh,0CDh,0CDh,0CDh,0CDh,0CDh,0CDh,0CDh,0CDh,0CDh,0CDh,0CDh,0CDh,0CDh,0CDh,0CDh,0CDh,0CDh,0CDh,0CDh,0CDh,0CDh,0CDh,0CDh,0CDh,0CDh,0CDh,0CDh,0BBh,'$'
-    MSG_FINAL2 db 0BAh,'               FIN  DEL  JUEGO                ',0BAh,'$'
+    MSG_FINAL2 db 0BAh,'               FIN  DEL  JUEGO              ',0BAh,'$'
     MSG_FINAL3 db 0BAh,'                                            ',0BAh,'$'
-    MSG_FINAL4 db 0BAh,'   [R]einiciar   [J]ugar de nuevo   [S]alir   ',0BAh,'$'
+    MSG_FINAL4 db 0BAh,'   [R]einiciar   [J]ugar de nuevo   [S]alir ',0BAh,'$'
     MSG_FINAL5 db 0C8h,0CDh,0CDh,0CDh,0CDh,0CDh,0CDh,0CDh,0CDh,0CDh,0CDh,0CDh,0CDh,0CDh,0CDh,0CDh,0CDh,0CDh,0CDh,0CDh,0CDh,0CDh,0CDh,0CDh,0CDh,0CDh,0CDh,0CDh,0CDh,0CDh,0CDh,0CDh,0CDh,0CDh,0CDh,0CDh,0CDh,0CDh,0CDh,0CDh,0CDh,0CDh,0CDh,0CDh,0CDh,0BCh,'$'
 
     LINHA_FINAL EQU 10
@@ -980,19 +980,19 @@ endp
 ;_________________________________________________________________________________________________________________________________
 readinitgame proc                   ; lee la entrada ENTER para jugar S - SALIR
     push ax
-  LEITURAJOGO:
+  LECTURAJUEGO:
     call readkeyboard
     cmp al, CR              ; verifica el ENTER
-    je INICIAROJOGO
+    je INICIARJUEGO
     cmp al, 's'
-    je SAIRDOJOGO
+    je SALIRJUEGO
     cmp al, 'S'
-    je SAIRDOJOGO
-    jmp LEITURAJOGO
-  SAIRDOJOGO:
+    je SALIRJUEGO
+    jmp LECTURAJUEGO
+  SALIRJUEGO:
     call exit
 
-  INICIAROJOGO:
+  INICIARJUEGO:
     pop ax
     ret
 endp
@@ -1404,17 +1404,17 @@ start proc                          ; proc inicial
 GAMESTART:
     call yourturn
     cmp tiros, 20
-    je TELA_FINAL
+    je USUPERDIO
        
     cmp acertos,12 ;5+4+3 = 12       ;12 aciertos gana    
-    je USERGANHOU
+    je USERGANO
     jmp GAMESTART
     
     
-USERGANHOU:
+USERGANO:
     call victorymsg
     call finalscreen   
-COMPGANHOU:
+USUPERDIO:
     call defeatmsg
     call finalscreen    
     
@@ -1427,7 +1427,7 @@ TELA_FINAL:
     cmp al, 'J'
     je M_JUGAR
     cmp al, 's'
-    je SAIRDOJOGO2
+    je SALIRJUEGO2
     cmp al, 'S'
     je S_SALIR
     cmp al, 'r'
@@ -1440,13 +1440,13 @@ TELA_FINAL:
     jmp JOGAR_DE_NOVO
     
    S_SALIR:
-    jmp SAIRDOJOGO2 
+    jmp SALIRJUEGO2 
    
    R_REINICIAR:
     jmp REINICIAR 
     
     
-  SAIRDOJOGO2:
+  SALIRJUEGO2:
     call exit
   REINICIAR:
     call restart
